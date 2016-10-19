@@ -1,7 +1,7 @@
 <template>
   <div>
     <group>
-      <cell title="vue" value="cool"></cell>
+      <cell title="第一个菜单" value="第一个菜单值"></cell>
     </group>
   </div>
 </template>

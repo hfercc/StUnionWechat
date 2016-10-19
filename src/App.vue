@@ -1,19 +1,18 @@
 <template>
   <div id="app">
-    <img src="./assets/logo.png">
-    <hello></hello>
     <vux></vux>
+    <bottom-bar></bottom-bar>
   </div>
 </template>
 
 <script>
-import Hello from './components/Hello'
 import Vux from './components/Vux'
+import BottomBar from './components/BottomBar.vue'
 
 export default {
   name: 'app',
   components: {
-    Hello,Vux
+    Vux,BottomBar
   }
 }
 </script>
