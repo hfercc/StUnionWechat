@@ -1,6 +1,6 @@
 <template>
 <div>
-    <tabbar>
+    <!--tabbar>
         <tabbar-item>
             <img slot="icon" src="https://o84lhz5xo.qnssl.com/master/src/assets/demo/icon_nav_button.png">
             <span slot="label">Wechat</span>
@@ -17,7 +17,7 @@
             <img slot="icon" src="https://o84lhz5xo.qnssl.com/master/src/assets/demo/icon_nav_cell.png">
             <span slot="label">News</span>
         </tabbar-item>
-    </tabbar>
+    </tabbar-->
 </div>
 </template>
 <script>
