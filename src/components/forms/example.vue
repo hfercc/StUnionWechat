@@ -34,7 +34,11 @@
             return{
                 btnText: '报名！',
                 isDisabled: false,
-                schoollist:[{key: '203',value:'203 物理学院'},{key: '201',value:'201 数学学院'}],
+                schoollist:[{key: '000',value:'000 少年班学院'},{key: '001',value:'201 数学科学学院'},{key:'203',value:'203 物理学院' +
+                ''},{key:'204',value:'204 管理学院'},{key:'206',value:'206 化学学院'},{key:'207',value:'207 生命科学学院'}, {
+                    key:'208',value:'208 地球和空间科学学院'},{key:'209',value:'209 工程科学学院'},{key:'210',value:'210 信息科学技术学院'},{
+                    key:'211',value:'211 人文与社会科学学院'},{key:'214',value:'214 核科学技术学院'},{key:'215',value:'215 计算机科学与技术学院'},
+                    {key:'216',value:'216 公共事务学院'},{key:'217',value:'217 环境科学与光电技术学院'}],
                 name:'',
                 stunum:'',
                 school:'',
@@ -76,21 +80,46 @@
                 this.isDisabled = true
                 this.btnText = '提交中'
                 axios.post(
-                    'https://service.piggest.com/wechat/sign.php', {
+                    'wechat/sign.php', {
                             name: _this.name,
                             stunum: _this.stunum,
                             school: _this.school,
                             phone: _this.pn,
                             email: _this.email,
+                            uid: _this.uid,
                         }).then(function(data) {
-                    console.log(data);
+                    if(data.data.error == 1) {
+                        _this.error_message='姓名格式错误!'
+                        _this.has_error=true
+                    }
+                    if(data.data.error == 2) {
+                        _this.error_message='学号格式错误!'
+                        _this.has_error=true
+                    }
+                    if(data.data.error == 3) {
+                        _this.error_message='学院格式错误!'
+                        _this.has_error=true
+                    }
+                    if(data.data.error == 4) {
+                        _this.error_message='学号格式错误!'
+                        _this.has_error=true
+                    }
+                    if(data.data.error == 5) {
+                        _this.error_message='邮箱格式错误!'
+                        _this.has_error=true
+                    }
+                    if(data.data.error == 6) {
+                        _this.error_message='您已报名!'
+                        _this.has_error=true
+                    }
+                    if(data.data.error == 0) {
+                        _this.error_message='您已成功报名!'
+                        _this.has_error=true
+                    }
                     _this.isDisabled = false
 
-                }).catch(function(error) {
-                    console.log(error);
-                })
-            }
-        },
+            })
+        }},
         components: {
             XButton,
             XInput,
