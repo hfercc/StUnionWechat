@@ -11,7 +11,7 @@ text-align: left;font-size: 0.9em;color: #333333;">投票说明:{{config.vote.in
                 <img v-bind:src="i.picture" style="float:left;width:80px;">
                 <countup v-if="has_voted" :end-val="result[i.id-1].result" :duration="3" class="c1"></countup>
                 <div style="float:left;">
-                <p style="text-align: left;margin:5px 10px; padding-top: 20px">选手姓名:{{i.name}}</p>
+                <p style="text-align: left;margin:5px 10px; padding-top: 14px">选手姓名:{{i.name}}</p>
                 <p style="text-align: left;margin:5px 10px;">{{i.info}} </p></div>
             </checker-item>
         </template>
