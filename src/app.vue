@@ -1,7 +1,6 @@
 <template>
     <div>
         <vote></vote>
-        <bottom-bar></bottom-bar>
     </div>
 </template>
 
@@ -12,7 +11,6 @@
     import Vote from './components/forms/vote.vue'
     export default {
         components: {
-            BottomBar,
             Vote
         }
     }

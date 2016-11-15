@@ -4,6 +4,7 @@
 
 var path = require('path')
 var HtmlWebpackPlugin = require('html-webpack-plugin')
+var webpack = require('webpack')
 module.exports = {
     entry: path.resolve(__dirname,'js/index.js'),
     output: {
@@ -56,9 +57,19 @@ module.exports = {
     },
     plugins:[
         new HtmlWebpackPlugin({
-            filename: 'index.html',
-            template: path.resolve(__dirname,'index.html'),
+            filename: 'vote.html',
+            template: path.resolve(__dirname,'vote.html'),
             inject:'body'
+        }),
+        new webpack.DefinePlugin({
+            'process.env': {
+                NODE_ENV: '"production"'
+            }
+        }),
+        new webpack.optimize.UglifyJsPlugin({
+            compress: {
+                warnings: false
+            }
         })
     ]
 }
