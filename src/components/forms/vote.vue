@@ -1,17 +1,17 @@
 <template>
     <p v-if='check' style="text-align: center;font-size:1.2em;">{{config.vote.name}}</p>
     <p v-if='check' style="border-top: 1px solid #dddddd;padding: 30px 0px 0px 10px;margin-left: 8px;margin-right: 8px;
-text-align: left;font-size: 0.9em;color: #333333;">投票说明:{{config.vote.info}}</p>
+text-align: left;font-size: 0.9em;color: #333333;">投票说明:{{{config.vote.info}}}</p>
     <divider style='margin-left:8px;margin-right:8px;' v-if="check"> 最多可选{{config.vote.mutichoice}}人 </divider>
     <checker style="width:100%;text-align: center" :max='config.vote.mutichoice' :value.sync="selected" type="checkbox"
              default-item-class="item-default"
              selected-item-class="item-selected" disabled-item-class="item-disabled">
         <template v-for="i in config.vote.candidate">
-            <checker-item :value="i.id">
+            <checker-item :value="i.id" style="position: relative;">
                 <img v-bind:src="i.picture" style="float:left;width:80px;">
                 <countup v-if="has_voted" :end-val="result[i.id-1].result" :duration="3" class="c1"></countup>
-                <div style="float:left;">
-                <p style="text-align: left;margin:5px 10px; padding-top: 14px">选手姓名:{{i.name}}</p>
+                <div style="float:left;" class="inside-checker">
+                <p style="text-align: left;margin:5px 10px; padding-top: 14px">姓名:{{i.name}}</p>
                 <p style="text-align: left;margin:5px 10px;">{{i.info}} </p></div>
             </checker-item>
         </template>
@@ -28,6 +28,7 @@ text-align: left;font-size: 0.9em;color: #333333;">投票说明:{{config.vote.in
 </template>
 
 <style>
+
     .item-default {
         width:90%;
         margin-left:auto;
@@ -41,6 +42,12 @@ text-align: left;font-size: 0.9em;color: #333333;">投票说明:{{config.vote.in
         background-color: #f7fff7;
         border: 1px solid #3cb764;
     }
+    .item-selected .inside-checker::after {
+        position:absolute;
+        top:0px;
+        right:0px;
+        content:url('./data/pic/static/s.jpg')
+    }
     .item-disabled {
         background-color: #eeeeee;
     }
@@ -48,8 +55,8 @@ text-align: left;font-size: 0.9em;color: #333333;">投票说明:{{config.vote.in
         font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif;
         display:block;
         float:right;
-        font-size:35px;
-        margin-top:30px;
+        font-size:25px;
+        margin-top:25px;
         color: #007a53;
     }
 </style>
@@ -142,16 +149,21 @@ text-align: left;font-size: 0.9em;color: #333333;">投票说明:{{config.vote.in
         },
         ready: function() {
             const _this = this
-            console.log(this.uid)
-            console.log(this.vid)
             axios.post('vote.php', {
                 uid:_this.uid,
                 vid:_this.vid,
                 from:_this.from
             }).then(function(response) {
-                if(response.data.vote) response.data.vote.candidate.shuffle();
+                if (response.data.vote) {
+                    response.data.vote.candidate.shuffle();
+                    if (response.data.vote.result) {
+                        _this.isDisabled = true;
+                        _this.btnText = '您已投票!';
+                        _this.result = response.data.vote.result;
+                        _this.has_voted = true;
+                    }
+                }
                 _this.config = response.data
-                console.log(_this.config)
                 wx.config({
                     debug:false,
                     appId: response.data.config.appId,

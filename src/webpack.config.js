@@ -36,18 +36,12 @@ module.exports = {
             {
                 test:/\.js$/,
                 loader: 'babel?presets=es2015',
-                exculde: /node_modules/
+                exclude: /node_modules/
             },
             {
                 // edit this for additional asset file types
                 test: /\.(png|jpg|gif)$/,
-                loader: 'url',
-                query: {
-                    // inline files smaller then 10kb as base64 dataURL
-                    limit: 10000,
-                    // fallback to file-loader with this naming scheme
-                    name: '[name].[ext]?[hash]'
-                }
+                loader: 'url-loader?limit=8192',
             },
             {
                 test: /vux.src.*?js$/,
