@@ -1,6 +1,6 @@
 <template>
     <div>
-        <vote></vote>
+        <messages></messages>
     </div>
 </template>
 
@@ -8,10 +8,10 @@
     import Group from 'vsc/group'
     import Cell from 'vsc/cell'
     import BottomBar from './components/navbar/BottomBar.vue'
-    import Vote from './components/forms/vote.vue'
+    import Messages from './components/messages.vue'
     export default {
         components: {
-            Vote
+            Messages
         }
     }
 </script>

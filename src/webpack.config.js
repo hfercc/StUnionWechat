@@ -51,8 +51,8 @@ module.exports = {
     },
     plugins:[
         new HtmlWebpackPlugin({
-            filename: 'vote.html',
-            template: path.resolve(__dirname,'vote.html'),
+            filename: 'index.html',
+            template: path.resolve(__dirname,'index.html'),
             inject:'body'
         }),
         new webpack.DefinePlugin({
@@ -62,7 +62,7 @@ module.exports = {
         }),
         new webpack.optimize.UglifyJsPlugin({
             compress: {
-                warnings: false
+                warnings: true
             }
         })
     ]
