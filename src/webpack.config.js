@@ -51,7 +51,7 @@ module.exports = {
     },
     plugins:[
         new HtmlWebpackPlugin({
-            filename: 'index.html',
+            filename: 'live.html',
             template: path.resolve(__dirname,'index.html'),
             inject:'body'
         }),
