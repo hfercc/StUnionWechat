@@ -11,3 +11,18 @@ export function GetQueryString(name) {
     r = null;
     return context == null || context == "" || context == "undefined" ? "" : context;
 }
+export function wxconfig(data) {
+    wx.config({
+        debug:false,
+        appId: data.config.appId,
+        timestamp: data.config.timestamp,
+        nonceStr:data.config.nonceStr,
+        signature: data.config.signature,
+        jsApiList:["hideMenuItems"]
+    });
+    wx.ready(function () {
+        wx.hideMenuItems({
+            menuList:["menuItem:share:weiboApp","menuItem:copyUrl","menuItem:share:email"]
+        });
+    })
+}

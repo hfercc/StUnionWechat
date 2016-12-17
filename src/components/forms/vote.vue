@@ -62,7 +62,7 @@ text-align: left;font-size: 0.9em;color: #333333;">投票说明:{{{config.vote.i
 </style>
 
 <script>
-    import {GetQueryString} from '../../js/utils.js'
+    import {GetQueryString,wxconfig} from '../../js/utils.js'
     import axios from 'axios'
     import XButton from 'vsc/x-button'
     import Card from 'vsc/card'
@@ -156,19 +156,7 @@ text-align: left;font-size: 0.9em;color: #333333;">投票说明:{{{config.vote.i
                     }
                 }
                 _this.config = response.data
-                wx.config({
-                    debug:false,
-                    appId: response.data.config.appId,
-                    timestamp: response.data.config.timestamp,
-                    nonceStr:response.data.config.nonceStr,
-                    signature: response.data.config.signature,
-                    jsApiList:["hideMenuItems"]
-                });
-                wx.ready(function () {
-                    wx.hideMenuItems({
-                            menuList:["menuItem:share:weiboApp","menuItem:copyUrl","menuItem:share:email"]
-                    });
-                })
+                wxconfig(response.data)
                 if(response.data.error) {
                     _this.check=false;
                     if(response.data.error != 3) {
