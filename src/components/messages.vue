@@ -3,8 +3,8 @@
     -webkit-user-drag: none; position: relative; overflow: hidden;" @pullup:loading="loadMore" :pullup-status.sync="pullupStatus">
         <div class="box2">
             <template v-for="i in contents">
-                <!--small>{{i.name}}</small-->
-                <p class="bubble">{{i.content}}</p>
+                <small v-on:click="info(i.uid,this.uid)" class="b-small">{{i.name}}</small>
+                <p :class="[ i.uid===this.uid ? 'bubble2' : 'bubble' ]" v-html="i.content"></p>
             </template>
         </div>
         <div slot="pullup" class="xs-plugin-pullup-container xs-plugin-pullup-up"
@@ -19,6 +19,9 @@
         <x-textarea :max="140" :show-counter="false" rows="2" style="height:20%;max-height:100px;" :value.sync="itext"></x-textarea>
         <x-button type='primary' style="background-color:#1b2333;border-radius:0px;" @click="submit">发送</x-button>
     </group></div>
+    <alert :show.sync="has_error" title="提示" button-text="返回">
+        <p style="text-align: center;">{{errormsg}}</p>
+    </alert>
 </template>
 
 <style>
@@ -33,8 +36,10 @@
         color: #fff;
         position: relative;
         border-radius: 2px;
+        margin-top:2px;
+        margin-bottom:8px;
     }
-    .bubble:before {
+    .bubble::before {
         content: '';
         position: absolute;
         left: -8px;
@@ -44,6 +49,34 @@
         border-top: 8px solid transparent;
         border-bottom: 8px solid transparent;
         border-right: 8px solid #3cb764;
+    }
+    .b-small {
+        margin-left:15px;
+    }
+    .bubble2 {
+        background-color: #3cb764;
+        padding-left: 10px;
+        padding-bottom: 10px;
+        padding-top: 10px;
+        margin-left:15px;
+        width: 90%;
+        min-width: 200px;
+        color: #fff;
+        position: relative;
+        border-radius: 2px;
+        margin-top:2px;
+        margin-bottom:8px;
+    }
+    .bubble2::after {
+        content: '';
+        position: absolute;
+        right: -8px;
+        top: 12px;
+        width: 0;
+        height: 0;
+        border-top: 8px solid transparent;
+        border-bottom: 8px solid transparent;
+        border-left: 8px solid #3cb764;
     }
     .rotate {
         transform: rotate(-180deg);
@@ -64,11 +97,13 @@
     import Group from 'vsc/group'
     import XTextarea from 'vsc/x-textarea'
     import XButton from 'vsc/x-button'
+    import Alert from 'vsc/alert'
     export default {
         data() {
             return {
                 o_s:'',
                 signature:'',
+                uid:0,
                 sid:' ',
                 actid:10,
                 action:' ',
@@ -79,11 +114,19 @@
                 contents:[],
                 itext:' ',
                 n:0,
+                has_error:false,
+                errormsg:''
             }
         },
         methods: {
+            info(uid1,uid2) {
+                if(uid1==uid2) {
+                    this.errormsg='返回微信会话，回复"修改用户名"可以修改你的用户名'
+                    this.has_error = true
+                }
+            },
             loadMore (uuid) {
-                console.log('detected')
+                console.log('Detected.')
                 axios.post('./live.php',{
                     sid:this.sid,
                     actid:this.actid,
@@ -119,8 +162,12 @@
                     actid:this.actid,
                     content:this.itext
                 }).then((response)=>{
-                    console.log(response)
                     this.itext = ' '
+                    if(response.data.error) {
+                        console.log('error')
+                        this.errormsg = response.data.msg
+                        this.has_error = true
+                    }
                 }).catch((error)=>{
                     console.log(error)
                 })
@@ -129,20 +176,29 @@
         ready() {
             this.sid = GetQueryString('sid')
             this.actid = GetQueryString('actid')
+            axios.get('./get_config.php').then((response)=>{
+                try {
+                    wxconfig(response.data)
+                }
+                catch(e) {
+                    console.log('Get config error!')
+                }
+            })
             axios.post('./live.php',{
                 sid:this.sid,
                 actid:this.actid,
                 signature:this.signature,
                 action:'refresh'
             }).then((response)=>{
-                console.log(response.data)
-                wxconfig(response.data)
                 if(response.data.error) {
                     console.log('error')
+                    console.log(response.data)
                 }
                 else {
                     this.contents = this.contents.concat(response.data.data)
                     try {
+                        this.uid = response.data.uid
+                        console.log(this.uid)
                         this.signature = this.contents[0].signature
                         this.o_s = this.signature
                         console.log(this.contents)
@@ -161,11 +217,14 @@
                 signature:this.signature,
                 action:'refresh'
             }).then((response)=>{
-                wxconfig(response.data)
                 if(response.data.error) {
                     console.log('error')
+                    this.errormsg = response.data.msg
+                    this.has_error = true
                 }
+
                 else if (response.data.data.length > 0 ){
+                    console.log('Refresh.')
                     this.contents = this.contents.reverse().concat(response.data.data).reverse()
                     try {
                         this.signature = this.contents[0].signature
@@ -181,7 +240,7 @@
             })},3000)
         },
         components: {
-            Scroller,Spinner,XTextarea,XButton,Group
+            Scroller,Spinner,XTextarea,XButton,Group,Alert
         }
     }
 </script>

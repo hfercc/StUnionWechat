@@ -141,6 +141,14 @@ text-align: left;font-size: 0.9em;color: #333333;">投票说明:{{{config.vote.i
         },
         ready: function() {
             const _this = this
+            axios.get('./get_config.php').then((response)=>{
+                try {
+                    wxconfig(response.data)
+                }
+                catch(e) {
+                    console.log('get config error!')
+                }
+            })
             axios.post('vote.php', {
                 uid:_this.uid,
                 vid:_this.vid,
@@ -155,8 +163,7 @@ text-align: left;font-size: 0.9em;color: #333333;">投票说明:{{{config.vote.i
                         _this.has_voted = true;
                     }
                 }
-                _this.config = response.data
-                wxconfig(response.data)
+
                 if(response.data.error) {
                     _this.check=false;
                     if(response.data.error != 3) {
