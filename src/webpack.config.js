@@ -51,19 +51,19 @@ module.exports = {
     },
     plugins:[
         new HtmlWebpackPlugin({
-            filename: 'live.html',
+            filename: 'form.html',
             template: path.resolve(__dirname,'index.html'),
             inject:'body'
         }),
-        new webpack.DefinePlugin({
+        /*new webpack.DefinePlugin({
             'process.env': {
-                NODE_ENV: '"production"'
+                NODE_ENV: '""'
             }
-        }),
-        new webpack.optimize.UglifyJsPlugin({
+        }),*/
+        /*new webpack.optimize.UglifyJsPlugin({
             compress: {
-                warnings: true
+                warnings: false
             }
-        })
+        })*/
     ]
 }

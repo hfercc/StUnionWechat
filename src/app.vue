@@ -1,6 +1,6 @@
 <template>
     <div style="height:100%">
-        <messages></messages>
+        <x-form></x-form>
     </div>
 </template>
 
@@ -8,10 +8,10 @@
     import Group from 'vsc/group'
     import Cell from 'vsc/cell'
     import BottomBar from './components/navbar/BottomBar.vue'
-    import Messages from './components/messages.vue'
+    import XForm from './components/forms/form.vue'
     export default {
         components: {
-            Messages
+            XForm
         }
     }
 </script>
