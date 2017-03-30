@@ -9,7 +9,7 @@ module.exports = {
     entry: path.resolve(__dirname,'js/index.js'),
     output: {
         path: path.resolve(__dirname,'../dist'),
-        filename: 'build.js',
+        filename: 'build-[hash].js',
         chunkFilename:'[id].[chunkhash].js'
     },
     resolve: {

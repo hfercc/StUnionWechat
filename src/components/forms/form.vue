@@ -10,13 +10,15 @@
                 <checklist :options="checkbox" :value.sync="c_r" :required="false"></checklist>
             </div>
             <div v-if="item.type=='radio'">
-                <radio :options="item.option" :value.sync="values[$index].value"></radio>
+                <group :title="item.title">
+                    <radio :options="item.option" :value.sync="values[$index].value" :title="item.title"></radio>
+                </group>
             </div>
             <div v-if="item.type=='select'">
                 <selector :title='item.title' :options="item.option" :value.sync="values[$index].value"></selector>
             </div>
             <div v-if="item.type=='date'">
-                <datetime :title='item.title' :value.sync="values[$index].value"></datetime>
+                <datetime :title='item.title' :min-year='1980' :value.sync="values[$index].value"></datetime>
             </div>
             <div v-if="item.type=='textarea'">
                 <x-textarea :placeholder="item.title" :value.sync="values[$index].value"></x-textarea>
@@ -46,6 +48,14 @@
     import InlineCalendar from 'vsc/inline-calendar'
     import Alert from 'vsc/alert'
     import _ from 'lodash'
+    Array.prototype.remove = function(dx) {
+        for(var i=0,n=0;i<this.length;i++) {
+            if(this[i]!=dx) {
+                this[n++]=this[i]
+            }
+        }
+        this.length-=1
+    }
     console.log('hello')
     export default {
         data() {
@@ -63,7 +73,7 @@
                 button_text:'提交',
                 checkbox:[],
                 c_r:[],
-                is_checkbox:1,
+                is_checkbox:0,
                 has_error:false,
                 error_message:''
             }
@@ -79,28 +89,33 @@
                 console.log(response)
                 _this.name  = response.data.name
                 _this.description = response.data.description
-                _this.units = response.data.structure
                 _.forEach(response.data.structure,(n)=>{
+                    console.log(_this.checkbox)
                     if(n.type=='text') {
                         _this.values.push({name:n.name,value:''})
+                        _this.units.push(n)
                     }
                     else if (n.type=='checkbox') {
-                        _this.checkbox.push({key:n.name,value:n.value})
-                        if(_this.is_checkbox)
-                            _this.values.push({name:n.name,value:''})
-                        _this.is_checkbox = 0;
+                        _this.checkbox.push({key:n.name,value:n.title,v:n.value})
+                        if(_this.is_checkbox==0)
+                            _this.units.push(n)
+                        _this.is_checkbox = 1;
                     }
                     else if (n.type=='select') {
                         _this.values.push({name:n.name,value:''})
+                        _this.units.push(n)
                     }
                     else if (n.type=='date') {
                         _this.values.push({name:n.name,value:''})
+                        _this.units.push(n)
                     }
                     else if (n.type=='textarea') {
                         _this.values.push({name:n.name,value:''})
+                        _this.units.push(n)
                     }
                     else if (n.type=='radio') {
                         _this.values.push({name:n.name,value:''})
+                        _this.units.push(n)
                     }
                 })
             })
@@ -114,7 +129,7 @@
                     _this.results[n.name]=n.value
                 })
                 _.forEach(this.c_r,(n)=>{
-                    _this.results[n] = _.result(_.find(this.checkbox,{'key':n}),'value')
+                    _this.results[n] = _.result(_.find(this.checkbox,{'key':n}),'v')
                 })
                 console.log(this.results)
                 axios.post('form.php?submit=yes',{
