@@ -51,7 +51,7 @@ module.exports = {
     },
     plugins:[
         new HtmlWebpackPlugin({
-            filename: 'form.html',
+            filename: 'vote.html',
             template: path.resolve(__dirname,'index.html'),
             inject:'body'
         }),

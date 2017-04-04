@@ -1,6 +1,6 @@
 <template>
     <div style="height:100%">
-        <X-Form></X-Form>
+        <Vote></Vote>
     </div>
 </template>
 
@@ -13,7 +13,7 @@
     import Messages from './components/messages.vue'
     export default {
         components: {
-            XForm
+            Vote
         }
     }
 </script>

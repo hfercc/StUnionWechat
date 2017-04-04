@@ -1,15 +1,15 @@
 <template>
-    <p v-if='check' style="text-align: center;font-size:1.2em;">{{config.vote.name}}</p>
+    <p v-if='check' style="text-align: center;font-size:1.2em;">{{result.name}}</p>
     <p v-if='check' style="border-top: 1px solid #dddddd;padding: 30px 0px 0px 10px;margin-left: 8px;margin-right: 8px;
-text-align: left;font-size: 0.9em;color: #333333;">投票说明:{{{config.vote.info}}}</p>
-    <divider style='margin-left:8px;margin-right:8px;' v-if="check"> 最多可选{{config.vote.mutichoice}}人 </divider>
-    <checker style="width:100%;text-align: center" :max='config.vote.mutichoice' :value.sync="selected" type="checkbox"
+text-align: left;font-size: 0.9em;color: #333333;">投票说明:{{{result.info}}}</p>
+    <divider style='margin-left:8px;margin-right:8px;' v-if="check"> 最多可选{{result.mutichoice}}人 </divider>
+    <checker style="width:100%;text-align: center" :max='result.mutichoice' :value.sync="selected" type="checkbox"
              default-item-class="item-default"
              selected-item-class="item-selected" disabled-item-class="item-disabled">
-        <template v-for="i in config.vote.candidate">
+        <template v-for="i in result.candidate">
             <checker-item :value="i.id" style="position: relative;">
                 <img v-bind:src="i.picture" style="float:left;width:80px;">
-                <countup v-if="has_voted" :end-val="result[i.id-1].result" :duration="3" class="c1"></countup>
+                <countup v-if="has_voted" :end-val="result.result[i.id-1].result" :duration="3" class="c1"></countup>
                 <div style="float:left;" class="inside-checker">
                 <p style="text-align: left;margin:5px 10px; padding-top: 14px">姓名:{{i.name}}</p>
                 <p style="text-align: left;margin:5px 10px;">{{i.info}} </p></div>
@@ -58,6 +58,7 @@ text-align: left;font-size: 0.9em;color: #333333;">投票说明:{{{config.vote.i
         font-size:25px;
         margin-top:25px;
         color: #007a53;
+        border:0px;
     }
 </style>
 
@@ -131,7 +132,7 @@ text-align: left;font-size: 0.9em;color: #333333;">投票说明:{{{config.vote.i
                         _this.isDisabled = false
                         _this.btnText = '投票！'
                     }
-                    else if (_this.config.vote.showresult) {
+                    else if (_this.vote.showresult) {
                         _this.btnText = '已投票'
                         _this.has_voted = true
                         _this.result = response.data
@@ -159,10 +160,11 @@ text-align: left;font-size: 0.9em;color: #333333;">投票说明:{{{config.vote.i
                     if (response.data.vote.result) {
                         _this.isDisabled = true;
                         _this.btnText = '您已投票!';
-                        _this.result = response.data.vote.result;
+                        _this.result = response.data.vote;
                         _this.has_voted = true;
                     }
                 }
+                console.log(_this.result)
 
                 if(response.data.error) {
                     _this.check=false;
