@@ -90,7 +90,7 @@ text-align: left;font-size: 0.9em;color: #333333;">投票说明:{{{result.info}}
               selected:[],
               isDisabled:false,
               config:null,
-              uid: GetQueryString('uid'),
+              sid: GetQueryString('sid'),
               vid: GetQueryString('vid'),
               from: GetQueryString('from'),
               check:true,
@@ -121,7 +121,7 @@ text-align: left;font-size: 0.9em;color: #333333;">投票说明:{{{result.info}}
 
                 console.log(this.selected)
                 axios.post('vote.php?submit=yes',{
-                    uid:_this.uid,
+                    sid:_this.sid,
                     vid:_this.vid,
                     id:_this.selected
                 }).then(function(response) {
@@ -151,8 +151,8 @@ text-align: left;font-size: 0.9em;color: #333333;">投票说明:{{{result.info}}
                 }
             })
             axios.post('vote.php', {
-                uid:_this.uid,
                 vid:_this.vid,
+                sid:_this.sid,
                 from:_this.from
             }).then(function(response) {
                 if (response.data.vote) {
